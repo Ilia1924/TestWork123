@@ -1,39 +1,51 @@
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  .input {
-    margin-right: 10px;
-    padding: 8px;
-    font-size: 16px;
-  }
-  
-  .button {
-    padding: 8px 16px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #0070f3;
-    color: white;
-    border: none;
-    border-radius: 4px;
-  
-    &:disabled {
-      background-color: #ccc;
-      cursor: not-allowed;
-    }
-  }
-  
-  .error {
-    color: red;
-    margin-top: 10px;
-  }
-  
-  .weatherCard {
-    margin-top: 20px;
-    padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background-color: #f9f9f9;
-  }
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.searchBox {
+  margin-bottom: 20px;
+}
+
+.recentCities {
+  margin-top: 20px;
+  text-align: left;
+}
+
+.cityList {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.weatherCard {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  position: relative;
+}
+
+.favoriteIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  font-size: 24px;
+}
+
+.heartFilled {
+  color: red;
+}
+
+.heartEmpty {
+  color: gray;
+}
