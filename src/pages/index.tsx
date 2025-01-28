@@ -36,20 +36,42 @@ export default function Home() {
     if (savedCities) {
       setRecentCities(JSON.parse(savedCities));
     }
+
+    const lastSearchedCity = localStorage.getItem('lastSearchedCity');
+    if (lastSearchedCity) {
+      fetchWeather(lastSearchedCity, false);
+    } else {
+      getWeatherByGeolocation();
+    }
   }, []);
 
-  const updateRecentCities = (city: string) => {
-    let updatedCities = [...recentCities];
-    if (updatedCities.includes(city)) {
-      updatedCities = updatedCities.filter((c) => c !== city);
+  const getWeatherByGeolocation = () => {
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          try {
+            const data = await fetchCurrentWeather(
+              undefined,
+              latitude,
+              longitude,
+            );
+            setWeather(data);
+            localStorage.setItem('lastSearchedCity', data.name);
+          } catch (err) {
+            setError('Не удалось загрузить погоду для вашего местоположения.');
+          }
+        },
+        (error) => {
+          setError('Не удалось получить ваше местоположение.');
+        },
+      );
+    } else {
+      setError('Геолокация не поддерживается вашим устройством.');
     }
-    updatedCities.unshift(city);
-    updatedCities = updatedCities.slice(0, 5);
-    setRecentCities(updatedCities);
-    localStorage.setItem('recentCities', JSON.stringify(updatedCities));
   };
 
-  const handleSearch = async () => {
+  const fetchWeather = async (city: string, updateRecent: boolean = true) => {
     if (!city.trim()) {
       setError('Пожалуйста, введите название города');
       return;
@@ -60,28 +82,41 @@ export default function Home() {
     try {
       const data = await fetchCurrentWeather(city);
       setWeather(data);
-      updateRecentCities(city);
-    } catch (err) {
-      setError('Ошибка при загрузке данных. Проверьте название города.');
-    } finally {
-      setLoading(false);
-        }
-  };
 
-  const handleRecentCityClick = async (recentCity: string) => {
-    setLoading(true);
-    setError('');
-    try {
-      const data = await fetchCurrentWeather(recentCity);
-      setWeather(data);
-      updateRecentCities(recentCity);
+      if (updateRecent) {
+        updateRecentCities(data.name); 
+      }
+
+      localStorage.setItem('lastSearchedCity', data.name);
     } catch (err) {
       setError('Ошибка при загрузке данных. Проверьте название города.');
     } finally {
       setLoading(false);
     }
   };
-  
+
+  const updateRecentCities = (city: string) => {
+    let updatedCities = [...recentCities];
+
+    if (updatedCities.includes(city)) {
+      updatedCities = updatedCities.filter((c) => c !== city);
+    }
+
+    updatedCities.unshift(city);
+    updatedCities = updatedCities.slice(0, 5);
+
+    setRecentCities(updatedCities);
+    localStorage.setItem('recentCities', JSON.stringify(updatedCities));
+  };
+
+  const handleSearch = () => {
+    fetchWeather(city);
+    setCity('');
+  };
+
+  const handleRecentCityClick = (city: string) => {
+    fetchWeather(city, false);
+  };
 
   const toggleFavorite = () => {
     if (!weather) return;
@@ -102,6 +137,11 @@ export default function Home() {
           className="form-control"
           value={city}
           onChange={(e) => setCity(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch();
+            }
+          }}
           placeholder="Введите город"
         />
         <button
@@ -134,7 +174,6 @@ export default function Home() {
 
       {weather && (
         <div className={styles.weatherCard}>
-          {/* Сердечко для добавления в избранное */}
           <div className={styles.favoriteIcon} onClick={toggleFavorite}>
             {favorites.includes(weather.name) ? (
               <FontAwesomeIcon
