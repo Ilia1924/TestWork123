@@ -3,24 +3,8 @@ import { fetchCurrentWeather } from '../services/weatherService';
 import { useWeatherStore } from '../store/weatherStore';
 import styles from '../styles/Home.module.scss';
 import Link from 'next/link';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart as solidHeart } from '@fortawesome/free-solid-svg-icons';
-
-interface WeatherData {
-  name: string;
-  main: {
-    temp: number;
-    humidity: number;
-    pressure: number;
-  };
-  weather: {
-    description: string;
-    icon: string;
-  }[];
-  wind: {
-    speed: number;
-  };
-}
+import WeatherCard from '../components/WeatherCard';
+import { WeatherData } from '@/types/types';
 
 export default function Home() {
   const [city, setCity] = useState<string>('');
@@ -84,7 +68,7 @@ export default function Home() {
       setWeather(data);
 
       if (updateRecent) {
-        updateRecentCities(data.name); 
+        updateRecentCities(data.name);
       }
 
       localStorage.setItem('lastSearchedCity', data.name);
@@ -173,31 +157,19 @@ export default function Home() {
       )}
 
       {weather && (
-        <div className={styles.weatherCard}>
-          <div className={styles.favoriteIcon} onClick={toggleFavorite}>
-            {favorites.includes(weather.name) ? (
-              <FontAwesomeIcon
-                icon={solidHeart}
-                className={styles.heartFilled}
-              />
-            ) : (
-              <FontAwesomeIcon
-                icon={solidHeart}
-                className={styles.heartEmpty}
-              />
-            )}
-          </div>
+        <WeatherCard
+          weather={weather}
+          onToggleFavorite={toggleFavorite}
+          isFavorite={favorites.includes(weather.name)}
+        />
+      )}
 
-          <h2>{weather.name}</h2>
-          <p>Температура: {weather.main.temp}°C</p>
-          <p>Влажность: {weather.main.humidity}%</p>
-          <p>Давление: {weather.main.pressure} hPa</p>
-          <p>Погода: {weather.weather[0].description}</p>
-          <p>Скорость ветра: {weather.wind.speed} м/с</p>
-          <Link href={`/forecast?city=${weather.name}`}>
-            <button className="btn btn-secondary">Прогноз на 5 дней</button>
-          </Link>
-        </div>
+      {favorites.length > 0 && (
+        <Link href="/favorites">
+          <button className="btn btn-warning mt-4">
+            Избранные города ({favorites.length})
+          </button>
+        </Link>
       )}
     </div>
   );

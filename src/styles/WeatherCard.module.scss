@@ -1,0 +1,32 @@
+.weatherCard {
+  position: relative;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 15px;
+  background-color: #f9f9f9;
+  margin: 15px 0;
+}
+
+.favoriteIcon {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  cursor: pointer;
+}
+
+.heartEmpty {
+  color: #bbb;
+}
+
+.heartFilled {
+  color: red;
+}
+
+.weatherCard h2 {
+  font-size: 1.5em;
+}
+
+.weatherCard p {
+  font-size: 1.1em;
+  margin-bottom: 5px;
+}
