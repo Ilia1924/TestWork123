@@ -23,7 +23,7 @@ export default function Forecast() {
     }
   }, [city]);
 
-  if (loading) return <div className="text-center mt-5">Загрузка...</div>;
+  if (loading) return <div className="text-center fs-3 mt-5">Loading...</div>;
   if (error) return <div className="alert alert-danger mt-5">{error}</div>;
 
   const groupedForecast = forecast?.list.reduce(
@@ -46,10 +46,10 @@ export default function Forecast() {
 
   return (
     <div className="container mt-5">
-      <h1 className="text-center mb-4">Прогноз погоды для {city}</h1>
+      <h1 className="text-center mb-4">Weather in {city}</h1>
       <div className="mb-4">
         <Link href="/">
-          <button className="btn btn-primary">На главную</button>
+          <button className="btn btn-primary">Back to main</button>
         </Link>
       </div>
       <div className="row">
@@ -66,13 +66,14 @@ export default function Forecast() {
                   title={new Date(item.date).toLocaleDateString('en-EN', {
                     weekday: 'short',
                     day: 'numeric',
-                    month: 'long',
+                    month: 'short',
                   })}
                   temperature={item.main.temp}
                   humidity={item.main.humidity}
                   feelsLike={item.main.feels_like}
                   windSpeed={item.wind.speed}
                   icon={item.weather[0].icon}
+                  description={item.weather[0].description}
                 />
               </div>
             </Link>

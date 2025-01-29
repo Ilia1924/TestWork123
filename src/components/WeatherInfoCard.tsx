@@ -14,6 +14,7 @@ export default function WeatherInfoCard({
   feelsLike,
   windSpeed,
   icon,
+  description,
   time,
 }: WeatherInfoCardProps) {
   return (
@@ -22,21 +23,21 @@ export default function WeatherInfoCard({
         <h5 className="card-title">{time || title}</h5>
         <img
           src={`http://openweathermap.org/img/wn/${icon}@2x.png`}
-          alt="Weather icon"
+          alt={description || 'Weather icon'}
           className="mb-3"
         />
         <p className="card-text">
-          <FontAwesomeIcon icon={faThermometerHalf} />
+          <FontAwesomeIcon icon={faThermometerHalf} />{' '}
           <strong>Temperature:</strong> {Math.ceil(temperature)}°C
           <br />
-          <FontAwesomeIcon icon={faTint} />
-          <strong>Humidity:</strong> {humidity}%
+          <FontAwesomeIcon icon={faTint} /> <strong>Humidity:</strong>{' '}
+          {humidity}%
           <br />
-          <FontAwesomeIcon icon={faThermometerFull} />
+          <FontAwesomeIcon icon={faThermometerFull} />{' '}
           <strong>Feels like:</strong> {Math.ceil(feelsLike)}°C
           <br />
-          <FontAwesomeIcon icon={faWind} />
-          <strong>Wind:</strong> {Math.ceil(windSpeed)} м/с
+          <FontAwesomeIcon icon={faWind} /> <strong>Wind:</strong>{' '}
+          {Math.ceil(windSpeed)} м/с
         </p>
       </div>
     </div>

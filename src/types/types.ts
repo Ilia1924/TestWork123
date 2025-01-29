@@ -45,5 +45,6 @@ export interface WeatherInfoCardProps {
   feelsLike: number;
   windSpeed: number;
   icon: string;
+  description: string;
   time?: string;
 }

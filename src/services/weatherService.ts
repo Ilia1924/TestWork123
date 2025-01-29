@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_KEY = 'my_key';
+const API_KEY = process.env.NEXT_PUBLIC_WEATHER_API_KEY ?? '';
 const BASE_URL = 'https://api.openweathermap.org/data/2.5';
 
 export const fetchCurrentWeather = async (
@@ -13,7 +13,7 @@ export const fetchCurrentWeather = async (
   }
 
   const params: Record<string, string | number> = {
-    appid: API_KEY,
+    appid: API_KEY || '',
     units: 'metric',
   };
 

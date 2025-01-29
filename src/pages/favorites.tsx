@@ -20,7 +20,7 @@ export default function Favorites() {
         );
         setFavoriteWeather(weatherData);
       } catch (err) {
-        console.error('Ошибка при загрузке данных для избранных городов:', err);
+        console.error('Error loading data for selected cities:', err);
       } finally {
         setLoading(false);
       }
@@ -39,13 +39,13 @@ export default function Favorites() {
 
   return (
     <div className={styles.container}>
-      <h1 className="text-center mb-4">Избранные города</h1>
+      <h1 className="text-center mb-4">Favorite cities</h1>
 
-      {loading && <p>Загрузка данных...</p>}
+      {loading && <p>Loading data...</p>}
 
       {!loading && favorites.length === 0 && (
         <div>
-          <p>У вас пока нет избранных городов.</p>
+          <p>You don't have any favourite cities yet</p>
           <Link href="/">
             <button className="btn btn-info mt-4">Back to search</button>
           </Link>

@@ -43,21 +43,21 @@ export default function Home() {
             setWeather(data);
             localStorage.setItem('lastSearchedCity', data.name);
           } catch (err) {
-            setError('Не удалось загрузить погоду для вашего местоположения.');
+            setError('Failed to download the weather for your location');
           }
         },
         (error) => {
-          setError('Не удалось получить ваше местоположение.');
+          setError('Failed to retrieve your location');
         },
       );
     } else {
-      setError('Геолокация не поддерживается вашим устройством.');
+      setError('Geolocation is not supported by your device');
     }
   };
 
   const fetchWeather = async (city: string, updateRecent: boolean = true) => {
     if (!city.trim()) {
-      setError('Пожалуйста, введите название города');
+      setError('Please enter the name of the city');
       return;
     }
 
@@ -73,7 +73,7 @@ export default function Home() {
 
       localStorage.setItem('lastSearchedCity', data.name);
     } catch (err) {
-      setError('Ошибка при загрузке данных. Проверьте название города.');
+      setError('Error loading data. Check the city name.');
     } finally {
       setLoading(false);
     }
@@ -114,7 +114,7 @@ export default function Home() {
 
   return (
     <div className={styles.container}>
-      <h1 className="text-center mb-4">Поиск погоды</h1>
+      <h1 className="text-center mb-4">Weather</h1>
       <div className={styles.searchBox}>
         <input
           type="text"
@@ -126,22 +126,30 @@ export default function Home() {
               handleSearch();
             }
           }}
-          placeholder="Введите город"
+          placeholder="Enter a city"
         />
         <button
           className="btn btn-primary mt-2"
           onClick={handleSearch}
           disabled={loading}
         >
-          {loading ? 'Загрузка...' : 'Поиск'}
+          {loading ? 'Loading...' : 'Search'}
         </button>
       </div>
 
       {error && <p className={styles.error}>{error}</p>}
 
+      {weather && (
+        <WeatherCard
+          weather={weather}
+          onToggleFavorite={toggleFavorite}
+          isFavorite={favorites.includes(weather.name)}
+        />
+      )}
+
       {recentCities.length > 0 && (
         <div className={styles.recentCities}>
-          <h2>Недавние города:</h2>
+          <h2>Recent cities:</h2>
           <div className={styles.cityList}>
             {recentCities.map((recentCity) => (
               <button
@@ -156,18 +164,10 @@ export default function Home() {
         </div>
       )}
 
-      {weather && (
-        <WeatherCard
-          weather={weather}
-          onToggleFavorite={toggleFavorite}
-          isFavorite={favorites.includes(weather.name)}
-        />
-      )}
-
       {favorites.length > 0 && (
         <Link href="/favorites">
           <button className="btn btn-warning mt-4">
-            Избранные города ({favorites.length})
+            Favourite cities ({favorites.length})
           </button>
         </Link>
       )}
