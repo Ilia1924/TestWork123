@@ -4,7 +4,7 @@
 
 ### 1. Склонируйте репозиторий
 ```sh
-git clone https://github.com/git@github.com:Ilia1924/TestWork123.git
+git clone https://github.com/Ilia1924/TestWork123.git
 ```
 ### 2. Перейдите в папку
 ```
